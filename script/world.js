@@ -867,12 +867,39 @@ var World = {
   },
 
   drawMap: function() {
-    var map = $('#map');
-    if(map.length === 0) {
-      map = new $('<div>').attr('id', 'map').appendTo('#worldOuter');
-      // register click handler
-      map.click(World.click);
-    }
+    // Remove old map
+    $('#map').remove();
+    $('#map-tiles').remove();
+    
+    // Create tile-based map
+    var tileMap = TileRenderer.renderWorldMap(
+      World.state.map,
+      World.state.mask,
+      World.curPos,
+      World.RADIUS
+    );
+    
+    // Add click handler for movement
+    tileMap.on('click', '.tile', function(e) {
+      var x = parseInt($(this).attr('data-x'));
+      var y = parseInt($(this).attr('data-y'));
+      
+      // Check if tile is adjacent to player
+      var dx = Math.abs(x - World.curPos[0]);
+      var dy = Math.abs(y - World.curPos[1]);
+      
+      if (dx <= 1 && dy <= 1 && (dx + dy) > 0 && World.state.mask[x][y]) {
+        // Move to adjacent tile
+        World.curPos[0] = x;
+        World.curPos[1] = y;
+        World.move(x - World.curPos[0], y - World.curPos[1]);
+      }
+    });
+    
+    tileMap.appendTo('#worldOuter');
+    
+    // Keep old ASCII map as fallback (hidden)
+    var oldMap = $('<div>').attr('id', 'map').css('display', 'none').appendTo('#worldOuter');
     var mapString = "";
     for(var j = 0; j <= World.RADIUS * 2; j++) {
       for(var i = 0; i <= World.RADIUS * 2; i++) {
@@ -888,21 +915,73 @@ var World = {
           ttClass += " bottom";
         }
         if(World.curPos[0] == i && World.curPos[1] == j) {
-          mapString += '<span class="landmark">@<div class="tooltip ' + ttClass + '">'+_('Wanderer')+'</div></span>';
+          mapString += '<span class="landmark player">@<div class="tooltip ' + ttClass + '">'+_('Wanderer')+'</div></span>';
         } else if(World.state.mask[i][j]) {
           var c = World.state.map[i][j];
           switch(c) {
             case World.TILE.VILLAGE:
-              mapString += '<span class="landmark">' + c + '<div class="tooltip' + ttClass + '">'+_('The&nbsp;Village')+'</div></span>';
+              mapString += '<span class="landmark village">' + c + '<div class="tooltip' + ttClass + '">'+_('The&nbsp;Village')+'</div></span>';
               break;
             default:
               if(typeof World.LANDMARKS[c] != 'undefined' && (c != World.TILE.OUTPOST || !World.outpostUsed(i, j))) {
-                mapString += '<span class="landmark">' + c + '<div class="tooltip' + ttClass + '">' + World.LANDMARKS[c].label + '</div></span>';
+                // Add landmark-specific classes for coloring
+                var landmarkClass = 'landmark';
+                switch(c) {
+                  case World.TILE.IRON_MINE:
+                    landmarkClass += ' landmark-iron';
+                    break;
+                  case World.TILE.COAL_MINE:
+                    landmarkClass += ' landmark-coal';
+                    break;
+                  case World.TILE.SULPHUR_MINE:
+                    landmarkClass += ' landmark-sulphur';
+                    break;
+                  case World.TILE.HOUSE:
+                    landmarkClass += ' landmark-house';
+                    break;
+                  case World.TILE.CAVE:
+                    landmarkClass += ' landmark-cave';
+                    break;
+                  case World.TILE.TOWN:
+                    landmarkClass += ' landmark-town';
+                    break;
+                  case World.TILE.CITY:
+                    landmarkClass += ' landmark-city';
+                    break;
+                  case World.TILE.SHIP:
+                    landmarkClass += ' landmark-ship';
+                    break;
+                  case World.TILE.BATTLEFIELD:
+                    landmarkClass += ' landmark-battlefield';
+                    break;
+                  case World.TILE.SWAMP:
+                    landmarkClass += ' landmark-swamp';
+                    break;
+                }
+                mapString += '<span class="' + landmarkClass + '">' + c + '<div class="tooltip' + ttClass + '">' + World.LANDMARKS[c].label + '</div></span>';
               } else {
                 if(c.length > 1) {
                   c = c[0];
                 }
-                mapString += c;
+                // Add terrain-specific classes for coloring
+                var tileClass = '';
+                switch(c) {
+                  case World.TILE.FOREST:
+                    tileClass = 'terrain-forest';
+                    break;
+                  case World.TILE.FIELD:
+                    tileClass = 'terrain-field';
+                    break;
+                  case World.TILE.BARRENS:
+                    tileClass = 'terrain-barrens';
+                    break;
+                  case World.TILE.ROAD:
+                    tileClass = 'terrain-road';
+                    break;
+                  default:
+                    tileClass = 'terrain-other';
+                }
+                mapString += '<span class="' + tileClass + '">' + c + '</span>';
               }
               break;
           }
@@ -912,7 +991,7 @@ var World = {
       }
       mapString += '<br/>';
     }
-    map.html(mapString);
+    oldMap.html(mapString);
   },
 
   die: function() {

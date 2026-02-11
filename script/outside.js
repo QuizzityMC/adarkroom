@@ -459,6 +459,24 @@ var Outside = {
 			village.attr('data-legend', _('village'));
 		}
 		
+		// Add visual village representation
+		$('#village-visual').remove();
+		if (hasPeeps && typeof TileRenderer !== 'undefined') {
+			var visualVillage = $('<div>').attr('id', 'village-visual')
+				.css({
+					'margin': '20px 0',
+					'text-align': 'center'
+				});
+			
+			var villageView = TileRenderer.renderVillage(
+				$SM.get('game.buildings') || {},
+				$SM.get('game.population') || 0
+			);
+			
+			visualVillage.append(villageView);
+			visualVillage.insertAfter(village);
+		}
+		
 		if(needsAppend && village.children().length > 1) {
 			village.prependTo('#outsidePanel');
 			village.animate({opacity:1}, 300, 'linear');

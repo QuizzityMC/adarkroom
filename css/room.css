@@ -43,10 +43,17 @@ div#stores {
 	cursor: default;
 	padding: 5px 10px;
 	width: 200px;
+	background-color: #fafafa;
 }
 
 div.storeRow {
 	position: relative;
+	transition: background-color 0.2s;
+	padding: 2px 0;
+}
+
+div.storeRow:hover {
+	background-color: #e8e8e8;
 }
 
 div#weapons {
@@ -57,4 +64,5 @@ div#weapons {
 	cursor: default;
 	padding: 5px 10px;
 	width: 200px;
+	background-color: #fafafa;
 }
