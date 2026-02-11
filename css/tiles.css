@@ -1,9 +1,9 @@
 /* Tile-based graphics system for visual overhaul */
 
-/* Base tile size - 16x16 pixels for retro feel */
+/* Base tile size - 32x32 pixels for better visibility */
 :root {
-  --tile-size: 16px;
-  --pixel-size: 2px;
+  --tile-size: 32px;
+  --pixel-size: 4px;
 }
 
 /* Tile grid container */
@@ -27,38 +27,86 @@
 .tile-forest {
   background: #2d5016;
   box-shadow: 
-    inset 0 0 0 2px #1a3009,
-    inset 4px 4px 0 0 #3d6826;
+    inset 0 0 0 3px #1a3009,
+    inset 8px 8px 0 0 #3d6826,
+    inset -4px -4px 0 0 #234012,
+    inset 4px 0 0 0 #2a4814;
+  position: relative;
+}
+
+.tile-forest::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #3d6826;
+  top: 10px;
+  left: 10px;
+  border-radius: 50%;
+  box-shadow: 0 2px 0 0 #1a3009;
 }
 
 .tile-field {
   background: #8b7355;
   box-shadow: 
-    inset 0 0 0 1px #6b5335,
-    inset 2px 2px 0 0 #9b8365;
+    inset 0 0 0 2px #6b5335,
+    inset 4px 4px 0 0 #9b8365,
+    inset -4px -4px 0 0 #7b6345;
+  position: relative;
+}
+
+.tile-field::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, #6b5335 0px, #6b5335 4px, transparent 4px, transparent 8px);
+  top: 50%;
 }
 
 .tile-barrens {
   background: #999;
   box-shadow: 
-    inset 0 0 0 1px #888,
-    inset 3px 3px 0 0 #aaa;
+    inset 0 0 0 2px #888,
+    inset 6px 6px 0 0 #aaa,
+    inset -4px -4px 0 0 #777;
 }
 
 .tile-road {
   background: #666;
   box-shadow: 
-    inset 0 0 0 1px #555,
-    inset 1px 0 0 0 #777,
-    inset 0 1px 0 0 #777;
+    inset 0 0 0 2px #555,
+    inset 2px 0 0 0 #777,
+    inset 0 2px 0 0 #777,
+    inset -2px 0 0 0 #555,
+    inset 0 -2px 0 0 #555;
 }
 
 .tile-water {
   background: #4169e1;
   box-shadow: 
-    inset 0 0 0 1px #2849c1,
-    inset 4px 4px 0 0 #5179f1;
+    inset 0 0 0 2px #2849c1,
+    inset 8px 8px 0 0 #5179f1,
+    inset -8px -8px 0 0 #3159d1;
   animation: water-shimmer 2s ease-in-out infinite;
+  position: relative;
+}
+
+.tile-water::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  top: 8px;
+  left: 12px;
+  animation: water-bubble 3s ease-in-out infinite;
+}
+
+@keyframes water-bubble {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+  50% { transform: translateY(-4px) scale(0.8); opacity: 0.6; }
 }
 
 @keyframes water-shimmer {
@@ -70,60 +118,154 @@
 .tile-house {
   background: #8b4513;
   box-shadow: 
-    inset 0 0 0 2px #6b3013,
-    inset 0 -4px 0 0 #4a2008,
-    inset 4px 0 0 0 #ab6533,
-    2px 2px 0 0 rgba(0,0,0,0.3);
+    inset 0 0 0 3px #6b3013,
+    inset 0 -8px 0 0 #4a2008,
+    inset 8px 0 0 0 #ab6533,
+    inset 0 8px 0 0 #9b5523,
+    4px 4px 0 0 rgba(0,0,0,0.4);
+  position: relative;
+}
+
+.tile-house::before {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #333;
+  top: 10px;
+  left: 10px;
+  box-shadow: inset 2px 2px 0 0 #555;
+}
+
+.tile-house::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  border-bottom: 12px solid #6b3013;
+  top: -8px;
+  left: 0;
 }
 
 .tile-hut {
   background: #654321;
   box-shadow:
-    inset 0 0 0 1px #452301,
-    inset 0 -6px 0 0 #daa520,
-    2px 2px 0 0 rgba(0,0,0,0.3);
+    inset 0 0 0 2px #452301,
+    inset 0 -12px 0 0 #daa520,
+    inset 0 8px 0 0 #754321,
+    4px 4px 0 0 rgba(0,0,0,0.3);
+  position: relative;
+}
+
+.tile-hut::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 40%;
+  background: repeating-linear-gradient(
+    90deg,
+    #daa520 0px,
+    #daa520 2px,
+    #c49520 2px,
+    #c49520 4px
+  );
+  bottom: 0;
+  left: 0;
 }
 
 .tile-village {
   background: #004d00;
   box-shadow: 
-    inset 0 0 0 2px #003300,
-    inset 4px 4px 0 0 #006d00,
-    inset -4px -4px 0 0 #002200;
+    inset 0 0 0 3px #003300,
+    inset 8px 8px 0 0 #006d00,
+    inset -8px -8px 0 0 #002200;
   position: relative;
 }
 
 .tile-village::after {
   content: '';
   position: absolute;
-  width: 8px;
-  height: 8px;
+  width: 16px;
+  height: 16px;
   background: #ff6600;
-  top: 4px;
-  left: 4px;
-  box-shadow: 0 0 4px #ff6600;
+  top: 8px;
+  left: 8px;
+  box-shadow: 
+    0 0 8px #ff6600,
+    inset 4px 4px 0 0 #ff8800;
+  animation: fire-flicker 0.5s ease-in-out infinite;
 }
 
 /* Mine tiles */
 .tile-mine {
   background: #444;
   box-shadow: 
-    inset 0 0 0 2px #222,
-    inset 4px 4px 0 0 #666,
-    inset 0 -4px 0 0 #333;
+    inset 0 0 0 3px #222,
+    inset 8px 8px 0 0 #666,
+    inset 0 -8px 0 0 #333,
+    inset -8px 0 0 0 #333;
+  position: relative;
+}
+
+.tile-mine::before {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 4px;
+  background: #000;
+  top: 14px;
+  left: 8px;
+}
+
+.tile-mine::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #888;
+  top: 4px;
+  right: 4px;
+  box-shadow: 
+    -8px 8px 0 0 #888,
+    -16px 16px 0 0 #888;
 }
 
 /* Player sprite */
 .tile-player {
   background: #c00;
   box-shadow: 
-    inset 0 0 0 2px #900,
-    inset 4px 0 0 0 #f00,
-    inset 0 4px 0 0 #800,
-    2px 2px 0 0 rgba(0,0,0,0.4);
+    inset 0 0 0 3px #900,
+    inset 8px 0 0 0 #f00,
+    inset 0 8px 0 0 #800,
+    inset -8px 0 0 0 #a00,
+    inset 0 -8px 0 0 #700,
+    4px 4px 0 0 rgba(0,0,0,0.5);
   animation: player-pulse 1s ease-in-out infinite;
   position: relative;
   z-index: 10;
+}
+
+.tile-player::before {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #ffccaa;
+  top: 4px;
+  left: 10px;
+  border-radius: 2px;
+}
+
+.tile-player::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 12px;
+  background: #600;
+  bottom: 0;
+  left: 6px;
 }
 
 @keyframes player-pulse {
@@ -132,7 +274,7 @@
     filter: brightness(1);
   }
   50% { 
-    transform: scale(1.1);
+    transform: scale(1.05);
     filter: brightness(1.2);
   }
 }
@@ -141,41 +283,69 @@
 .tile-villager {
   background: #ff9966;
   box-shadow: 
-    inset 0 0 0 1px #dd7744,
-    inset 2px 2px 0 0 #ffbb88,
-    inset 0 -4px 0 0 #8b4513;
+    inset 0 0 0 2px #dd7744,
+    inset 4px 4px 0 0 #ffbb88,
+    inset 0 -8px 0 0 #8b4513,
+    2px 2px 0 0 rgba(0,0,0,0.3);
   animation: villager-idle 3s ease-in-out infinite;
+  position: relative;
+}
+
+.tile-villager::before {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #ffccaa;
+  top: 4px;
+  left: 10px;
+  border-radius: 50%;
 }
 
 @keyframes villager-idle {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-1px); }
+  50% { transform: translateY(-2px); }
 }
 
 /* Fire/campfire tile */
 .tile-fire {
   background: #ff6600;
   box-shadow: 
-    inset 0 0 0 2px #ff3300,
-    inset 4px 4px 0 0 #ffaa00,
-    0 0 8px #ff6600;
+    inset 0 0 0 3px #ff3300,
+    inset 8px 8px 0 0 #ffaa00,
+    inset -8px -8px 0 0 #dd4400,
+    0 0 16px #ff6600;
   animation: fire-flicker 0.3s ease-in-out infinite;
+  position: relative;
+}
+
+.tile-fire::before {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 16px;
+  background: #ffaa00;
+  bottom: 0;
+  left: 10px;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
 }
 
 @keyframes fire-flicker {
   0%, 100% { 
     opacity: 1;
     box-shadow: 
-      inset 0 0 0 2px #ff3300,
-      inset 4px 4px 0 0 #ffaa00,
-      0 0 8px #ff6600;
+      inset 0 0 0 3px #ff3300,
+      inset 8px 8px 0 0 #ffaa00,
+      inset -8px -8px 0 0 #dd4400,
+      0 0 16px #ff6600;
   }
   50% { 
-    opacity: 0.8;
+    opacity: 0.9;
     box-shadow: 
-      inset 0 0 0 2px #dd3300,
-      inset 4px 4px 0 0 #ff9900,
-      0 0 12px #ff6600;
+      inset 0 0 0 3px #dd3300,
+      inset 8px 8px 0 0 #ff9900,
+      inset -8px -8px 0 0 #cc3300,
+      0 0 24px #ff6600;
   }
 }
 

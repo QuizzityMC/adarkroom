@@ -4,7 +4,7 @@
  */
 
 var TileRenderer = {
-  TILE_SIZE: 16,
+  TILE_SIZE: 32,
   
   /**
    * Create a tile element with given class
