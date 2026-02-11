@@ -1,0 +1,272 @@
+/* Tile-based graphics system for visual overhaul */
+
+/* Base tile size - 16x16 pixels for retro feel */
+:root {
+  --tile-size: 16px;
+  --pixel-size: 2px;
+}
+
+/* Tile grid container */
+.tile-grid {
+  display: inline-grid;
+  gap: 0;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Base tile class */
+.tile {
+  width: var(--tile-size);
+  height: var(--tile-size);
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Terrain tiles using box-shadow for pixel art */
+.tile-forest {
+  background: #2d5016;
+  box-shadow: 
+    inset 0 0 0 2px #1a3009,
+    inset 4px 4px 0 0 #3d6826;
+}
+
+.tile-field {
+  background: #8b7355;
+  box-shadow: 
+    inset 0 0 0 1px #6b5335,
+    inset 2px 2px 0 0 #9b8365;
+}
+
+.tile-barrens {
+  background: #999;
+  box-shadow: 
+    inset 0 0 0 1px #888,
+    inset 3px 3px 0 0 #aaa;
+}
+
+.tile-road {
+  background: #666;
+  box-shadow: 
+    inset 0 0 0 1px #555,
+    inset 1px 0 0 0 #777,
+    inset 0 1px 0 0 #777;
+}
+
+.tile-water {
+  background: #4169e1;
+  box-shadow: 
+    inset 0 0 0 1px #2849c1,
+    inset 4px 4px 0 0 #5179f1;
+  animation: water-shimmer 2s ease-in-out infinite;
+}
+
+@keyframes water-shimmer {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+
+/* Building/landmark tiles */
+.tile-house {
+  background: #8b4513;
+  box-shadow: 
+    inset 0 0 0 2px #6b3013,
+    inset 0 -4px 0 0 #4a2008,
+    inset 4px 0 0 0 #ab6533,
+    2px 2px 0 0 rgba(0,0,0,0.3);
+}
+
+.tile-hut {
+  background: #654321;
+  box-shadow:
+    inset 0 0 0 1px #452301,
+    inset 0 -6px 0 0 #daa520,
+    2px 2px 0 0 rgba(0,0,0,0.3);
+}
+
+.tile-village {
+  background: #004d00;
+  box-shadow: 
+    inset 0 0 0 2px #003300,
+    inset 4px 4px 0 0 #006d00,
+    inset -4px -4px 0 0 #002200;
+  position: relative;
+}
+
+.tile-village::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #ff6600;
+  top: 4px;
+  left: 4px;
+  box-shadow: 0 0 4px #ff6600;
+}
+
+/* Mine tiles */
+.tile-mine {
+  background: #444;
+  box-shadow: 
+    inset 0 0 0 2px #222,
+    inset 4px 4px 0 0 #666,
+    inset 0 -4px 0 0 #333;
+}
+
+/* Player sprite */
+.tile-player {
+  background: #c00;
+  box-shadow: 
+    inset 0 0 0 2px #900,
+    inset 4px 0 0 0 #f00,
+    inset 0 4px 0 0 #800,
+    2px 2px 0 0 rgba(0,0,0,0.4);
+  animation: player-pulse 1s ease-in-out infinite;
+  position: relative;
+  z-index: 10;
+}
+
+@keyframes player-pulse {
+  0%, 100% { 
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% { 
+    transform: scale(1.1);
+    filter: brightness(1.2);
+  }
+}
+
+/* Villager sprite */
+.tile-villager {
+  background: #ff9966;
+  box-shadow: 
+    inset 0 0 0 1px #dd7744,
+    inset 2px 2px 0 0 #ffbb88,
+    inset 0 -4px 0 0 #8b4513;
+  animation: villager-idle 3s ease-in-out infinite;
+}
+
+@keyframes villager-idle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1px); }
+}
+
+/* Fire/campfire tile */
+.tile-fire {
+  background: #ff6600;
+  box-shadow: 
+    inset 0 0 0 2px #ff3300,
+    inset 4px 4px 0 0 #ffaa00,
+    0 0 8px #ff6600;
+  animation: fire-flicker 0.3s ease-in-out infinite;
+}
+
+@keyframes fire-flicker {
+  0%, 100% { 
+    opacity: 1;
+    box-shadow: 
+      inset 0 0 0 2px #ff3300,
+      inset 4px 4px 0 0 #ffaa00,
+      0 0 8px #ff6600;
+  }
+  50% { 
+    opacity: 0.8;
+    box-shadow: 
+      inset 0 0 0 2px #dd3300,
+      inset 4px 4px 0 0 #ff9900,
+      0 0 12px #ff6600;
+  }
+}
+
+/* Fog of war overlay */
+.tile-fog {
+  position: relative;
+}
+
+.tile-fog::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+}
+
+/* Interactive tiles */
+.tile.clickable {
+  cursor: pointer;
+  transition: transform 0.1s, filter 0.1s;
+}
+
+.tile.clickable:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+  z-index: 5;
+}
+
+/* Tile tooltips */
+.tile[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 100;
+}
+
+.tile[data-tooltip]:hover::after {
+  opacity: 1;
+}
+
+/* World map container with tiles */
+#map-tiles {
+  display: inline-grid;
+  gap: 0;
+  border: 2px solid #333;
+  background: #1a1a1a;
+  padding: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* Village view container */
+#village-tiles {
+  display: grid;
+  grid-template-columns: repeat(20, var(--tile-size));
+  grid-template-rows: repeat(15, var(--tile-size));
+  gap: 0;
+  border: 2px solid #333;
+  background: #2d4a2d;
+  padding: 8px;
+  position: relative;
+}
+
+/* Animated grass background for village */
+#village-tiles::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 8px,
+      rgba(45, 90, 22, 0.1) 8px,
+      rgba(45, 90, 22, 0.1) 16px
+    );
+  pointer-events: none;
+}

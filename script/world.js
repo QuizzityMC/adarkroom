@@ -867,12 +867,39 @@ var World = {
   },
 
   drawMap: function() {
-    var map = $('#map');
-    if(map.length === 0) {
-      map = new $('<div>').attr('id', 'map').appendTo('#worldOuter');
-      // register click handler
-      map.click(World.click);
-    }
+    // Remove old map
+    $('#map').remove();
+    $('#map-tiles').remove();
+    
+    // Create tile-based map
+    var tileMap = TileRenderer.renderWorldMap(
+      World.state.map,
+      World.state.mask,
+      World.curPos,
+      World.RADIUS
+    );
+    
+    // Add click handler for movement
+    tileMap.on('click', '.tile', function(e) {
+      var x = parseInt($(this).attr('data-x'));
+      var y = parseInt($(this).attr('data-y'));
+      
+      // Check if tile is adjacent to player
+      var dx = Math.abs(x - World.curPos[0]);
+      var dy = Math.abs(y - World.curPos[1]);
+      
+      if (dx <= 1 && dy <= 1 && (dx + dy) > 0 && World.state.mask[x][y]) {
+        // Move to adjacent tile
+        World.curPos[0] = x;
+        World.curPos[1] = y;
+        World.move(x - World.curPos[0], y - World.curPos[1]);
+      }
+    });
+    
+    tileMap.appendTo('#worldOuter');
+    
+    // Keep old ASCII map as fallback (hidden)
+    var oldMap = $('<div>').attr('id', 'map').css('display', 'none').appendTo('#worldOuter');
     var mapString = "";
     for(var j = 0; j <= World.RADIUS * 2; j++) {
       for(var i = 0; i <= World.RADIUS * 2; i++) {
@@ -964,7 +991,7 @@ var World = {
       }
       mapString += '<br/>';
     }
-    map.html(mapString);
+    oldMap.html(mapString);
   },
 
   die: function() {
