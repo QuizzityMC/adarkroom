@@ -897,7 +897,41 @@ var World = {
               break;
             default:
               if(typeof World.LANDMARKS[c] != 'undefined' && (c != World.TILE.OUTPOST || !World.outpostUsed(i, j))) {
-                mapString += '<span class="landmark">' + c + '<div class="tooltip' + ttClass + '">' + World.LANDMARKS[c].label + '</div></span>';
+                // Add landmark-specific classes for coloring
+                var landmarkClass = 'landmark';
+                switch(c) {
+                  case World.TILE.IRON_MINE:
+                    landmarkClass += ' landmark-iron';
+                    break;
+                  case World.TILE.COAL_MINE:
+                    landmarkClass += ' landmark-coal';
+                    break;
+                  case World.TILE.SULPHUR_MINE:
+                    landmarkClass += ' landmark-sulphur';
+                    break;
+                  case World.TILE.HOUSE:
+                    landmarkClass += ' landmark-house';
+                    break;
+                  case World.TILE.CAVE:
+                    landmarkClass += ' landmark-cave';
+                    break;
+                  case World.TILE.TOWN:
+                    landmarkClass += ' landmark-town';
+                    break;
+                  case World.TILE.CITY:
+                    landmarkClass += ' landmark-city';
+                    break;
+                  case World.TILE.SHIP:
+                    landmarkClass += ' landmark-ship';
+                    break;
+                  case World.TILE.BATTLEFIELD:
+                    landmarkClass += ' landmark-battlefield';
+                    break;
+                  case World.TILE.SWAMP:
+                    landmarkClass += ' landmark-swamp';
+                    break;
+                }
+                mapString += '<span class="' + landmarkClass + '">' + c + '<div class="tooltip' + ttClass + '">' + World.LANDMARKS[c].label + '</div></span>';
               } else {
                 if(c.length > 1) {
                   c = c[0];

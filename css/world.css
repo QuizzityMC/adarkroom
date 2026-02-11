@@ -60,6 +60,47 @@
 	color: #004d00;
 }
 
+/* Landmark-specific colors */
+#map .landmark-iron {
+	color: #666;
+}
+
+#map .landmark-coal {
+	color: #333;
+}
+
+#map .landmark-sulphur {
+	color: #cc9900;
+}
+
+#map .landmark-house {
+	color: #8b4513;
+}
+
+#map .landmark-cave {
+	color: #555;
+}
+
+#map .landmark-town {
+	color: #663300;
+}
+
+#map .landmark-city {
+	color: #404040;
+}
+
+#map .landmark-ship {
+	color: #4169e1;
+}
+
+#map .landmark-battlefield {
+	color: #8b0000;
+}
+
+#map .landmark-swamp {
+	color: #556b2f;
+}
+
 @keyframes pulse {
 	0%, 100% { opacity: 1; }
 	50% { opacity: 0.6; }

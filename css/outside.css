@@ -6,6 +6,7 @@ div#village {
 	cursor: default;
 	padding: 5px 10px;
 	width: 200px;
+	background-color: #fafafa;
 }
 
 div#population {
@@ -49,6 +50,12 @@ div#workers {
 	position: relative;
 	margin: 10px 0px;
 	cursor: default;
+	transition: background-color 0.2s;
+	padding: 2px 0;
+}
+
+.workerRow:hover {
+	background-color: #e8e8e8;
 }
 
 .workerRow .tooltip {

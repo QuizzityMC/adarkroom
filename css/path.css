@@ -4,6 +4,7 @@
 	width: 200px;
 	margin-bottom: 20px;
 	padding: 5px 10px;
+	background-color: #fafafa;
 }
 
 div#outfitting:before, div#perks:before {
@@ -17,6 +18,12 @@ div.outfitRow {
 	position: relative;
 	cursor: default;
 	margin: 10px -30px 10px 0px;
+	transition: background-color 0.2s;
+	padding: 2px 0;
+}
+
+div.outfitRow:hover {
+	background-color: #e8e8e8;
 }
 
 div.outfitRow > .row_val {
@@ -48,10 +55,17 @@ div#perks {
 	cursor: default;
 	padding: 5px 10px;
 	width: 200px;
+	background-color: #fafafa;
 }
 
 div.perkRow {
 	position: relative;
+	transition: background-color 0.2s;
+	padding: 2px 0;
+}
+
+div.perkRow:hover {
+	background-color: #e8e8e8;
 }
 
 div.perkRow .row_key {
