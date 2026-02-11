@@ -251,6 +251,7 @@
       Engine.travelTo(Room);
 
       setTimeout(notifyAboutSound, 3000);
+      setTimeout(function() { Engine.showStartupImportDialog(); }, 500);
 
     },
     resumeAudioContext: function () {
@@ -293,7 +294,51 @@
       } catch(e) {
         State = {};
         $SM.set('version', Engine.VERSION);
+        $SM.set('game.needsStartupImport', true);
         Engine.event('progress', 'new game');
+      }
+    },
+
+    showStartupImportDialog: function() {
+      if($SM.get('game.needsStartupImport', true)) {
+        $SM.set('game.needsStartupImport', false);
+        Events.startEvent({
+          title: _('Welcome to A Dark Room'),
+          scenes: {
+            start: {
+              text: [
+                _('awake. head throbbing. vision blurry.'),
+                _('would you like to import a previous save?')
+              ],
+              buttons: {
+                'import': {
+                  text: _('import save'),
+                  nextScene: {1: 'inputImport'},
+                  onChoose: Engine.enableSelection
+                },
+                'new': {
+                  text: _('start new game'),
+                  nextScene: 'end'
+                }
+              }
+            },
+            'inputImport': {
+              text: [_('paste your save code here.')],
+              textarea: '',
+              buttons: {
+                'okay': {
+                  text: _('import'),
+                  nextScene: 'end',
+                  onChoose: Engine.import64
+                },
+                'cancel': {
+                  text: _('cancel'),
+                  nextScene: 'end'
+                }
+              }
+            }
+          }
+        });
       }
     },
 

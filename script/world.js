@@ -888,12 +888,12 @@ var World = {
           ttClass += " bottom";
         }
         if(World.curPos[0] == i && World.curPos[1] == j) {
-          mapString += '<span class="landmark">@<div class="tooltip ' + ttClass + '">'+_('Wanderer')+'</div></span>';
+          mapString += '<span class="landmark player">@<div class="tooltip ' + ttClass + '">'+_('Wanderer')+'</div></span>';
         } else if(World.state.mask[i][j]) {
           var c = World.state.map[i][j];
           switch(c) {
             case World.TILE.VILLAGE:
-              mapString += '<span class="landmark">' + c + '<div class="tooltip' + ttClass + '">'+_('The&nbsp;Village')+'</div></span>';
+              mapString += '<span class="landmark village">' + c + '<div class="tooltip' + ttClass + '">'+_('The&nbsp;Village')+'</div></span>';
               break;
             default:
               if(typeof World.LANDMARKS[c] != 'undefined' && (c != World.TILE.OUTPOST || !World.outpostUsed(i, j))) {
@@ -902,7 +902,25 @@ var World = {
                 if(c.length > 1) {
                   c = c[0];
                 }
-                mapString += c;
+                // Add terrain-specific classes for coloring
+                var tileClass = '';
+                switch(c) {
+                  case World.TILE.FOREST:
+                    tileClass = 'terrain-forest';
+                    break;
+                  case World.TILE.FIELD:
+                    tileClass = 'terrain-field';
+                    break;
+                  case World.TILE.BARRENS:
+                    tileClass = 'terrain-barrens';
+                    break;
+                  case World.TILE.ROAD:
+                    tileClass = 'terrain-road';
+                    break;
+                  default:
+                    tileClass = 'terrain-other';
+                }
+                mapString += '<span class="' + tileClass + '">' + c + '</span>';
               }
               break;
           }
